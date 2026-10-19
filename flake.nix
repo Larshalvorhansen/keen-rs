@@ -36,20 +36,14 @@
           ];
         };
 
-        # macOS-only build inputs. egui/winit/objc2 and many crates
-        # need these frameworks when linking on Darwin.
-        darwinLibs = pkgs.lib.optionals pkgs.stdenv.isDarwin (
-          with pkgs;
-          [
-            libiconv
-            darwin.apple_sdk.frameworks.Security
-            darwin.apple_sdk.frameworks.SystemConfiguration
-            darwin.apple_sdk.frameworks.CoreFoundation
-            darwin.apple_sdk.frameworks.Metal
-            darwin.apple_sdk.frameworks.QuartzCore
-            darwin.apple_sdk.frameworks.AppKit
-          ]
-        );
+        # macOS-only build inputs. The Apple frameworks (AppKit,
+        # QuartzCore, Metal, Security, SystemConfiguration, CoreFoundation)
+        # are now provided automatically by the Darwin stdenv via
+        # $SDKROOT, so they must NOT be listed explicitly here.
+        # See: https://nixos.org/manual/nixpkgs/stable/#sec-darwin-legacy-frameworks
+        darwinLibs = pkgs.lib.optionals pkgs.stdenv.hostPlatform.isDarwin [
+          pkgs.libiconv
+        ];
 
       in
       {
@@ -68,15 +62,15 @@
 
           shellHook = ''
             echo "=== Minsky-RS dev shell ==="
-            echo "Rust: $(rustc --version)"
+            echo "Rust:  $(rustc --version)"
             echo "Cargo: $(cargo --version)"
             echo ""
             echo "Phase 1 checklist:"
-            echo "  rustup show          # note: rustup is NOT used here; toolchain is Nix-pinned"
             echo "  rustc --version"
             echo "  cargo --version"
             echo "  cargo new minsky-rs --bin && cd minsky-rs && cargo run"
             echo ""
+            echo "Note: rustup is NOT used here; the toolchain is Nix-pinned."
             echo "Tip: use 'nix develop -c cargo run' for one-off commands."
           '';
         };
