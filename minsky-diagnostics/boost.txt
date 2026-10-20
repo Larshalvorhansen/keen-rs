@@ -1,0 +1,9 @@
+=== C++ standard library ===
+clang version 21.1.8
+Target: arm64-apple-darwin24.6.0
+Thread model: posix
+InstalledDir: /nix/store/9zr22p7w74pz6jviy2qy9g4bnn0zlafa-clang-21.1.8/bin
+=== Boost headers and linker ===
+1_91
+test
+BOOST_COMPILE_LINK=OK

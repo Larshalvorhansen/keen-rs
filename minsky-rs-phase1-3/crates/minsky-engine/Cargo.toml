@@ -1,0 +1,10 @@
+[package]
+name = "minsky-engine"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+minsky-model = { path = "../minsky-model" }
+minsky-tensor = { path = "../minsky-tensor" }

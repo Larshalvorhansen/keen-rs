@@ -1,0 +1,48 @@
+MINSKY BUILD DIAGNOSTIC SUMMARY
+================================
+
+System:
+arm64
+
+Python:
+Python 3.14.7
+
+Classdesc:
+Executable available
+
+Boost:
+BOOST_COMPILE_LINK=OK
+
+Python extension:
+Not built
+
+Package availability:
+tcl                    NOT FOUND by pkg-config
+tk                     NOT FOUND by pkg-config
+
+Previous build errors:
+120:env: pkg-config: No such file or directory
+122:env: pkg-config: No such file or directory
+123:env: pkg-config: No such file or directory
+124:env: pkg-config: No such file or directory
+126:env: pkg-config: No such file or directory
+127:env: pkg-config: No such file or directory
+128:env: pkg-config: No such file or directory
+194:include/Makefile:180: cannot figure out boost extension
+195:rm: a.out: No such file or directory
+197:Makefile:108: cdhdrs: No such file or directory
+200:include/Makefile:180: cannot figure out boost extension
+201:rm: a.out: No such file or directory
+203:Makefile:108: cdhdrs: No such file or directory
+205:env: pkg-config: No such file or directory
+206:env: pkg-config: No such file or directory
+207:env: pkg-config: No such file or directory
+209:env: pkg-config: No such file or directory
+210:env: pkg-config: No such file or directory
+211:env: pkg-config: No such file or directory
+214:include/Makefile:180: cannot figure out boost extension
+215:rm: a.out: No such file or directory
+217:Makefile:108: cdhdrs: No such file or directory
+219:env: pkg-config: No such file or directory
+220:env: pkg-config: No such file or directory
+221:env: pkg-config: No such file or directory

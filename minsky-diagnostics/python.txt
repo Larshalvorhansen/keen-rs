@@ -1,0 +1,23 @@
+=== Python version ===
+Python 3.14.7
+/nix/store/0kcws5blwbdyxqxjd1w8hjipz61xny3k-python3-3.14.7/bin/python3
+
+=== Python configuration ===
+Executable: /nix/store/0kcws5blwbdyxqxjd1w8hjipz61xny3k-python3-3.14.7/bin/python3
+Version: 3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 21.1.8 ]
+Include: /nix/store/0kcws5blwbdyxqxjd1w8hjipz61xny3k-python3-3.14.7/include/python3.14
+Extension suffix: .cpython-314-darwin.so
+Platform: macosx-14.0-arm64
+
+=== Existing extension files ===
+
+=== Import test ===
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from pyminsky import minsky; print("IMPORT OK")
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'pyminsky'
+
+=== Python binding source ===
+-rw-r--r-- 1 lhh staff 3.4K Oct 19 16:44 RESTService/pyminsky.cc
+-rw-r--r-- 1 lhh staff 4.8K Oct 19 16:45 ecolab/classdesc/pythonCAPI.cc

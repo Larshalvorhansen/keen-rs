@@ -1,0 +1,22 @@
+=== Upstream revision ===
+06923f7e4df5d2bcbc67c5cf726ecc1d609da775
+ edbdf36c6ce7f1a2cd597b06f8da0c529961cddb RavelCAPI (2.1.6-13-gedbdf36)
+ 2212c8094b40753cf9e8731d6a5413c23ef0e704 RavelCAPI/civita (2212c80)
+ a5ac164b77bf25b24aa12678d23b522b20aa6f37 ecolab (6.0-89-ga5ac164)
+ f7d483093fbf59b31165eba28cab6a157a26cb12 ecolab/Ouroboros-SYCL (f7d4830)
+ 462af7ce8f7635bd4b3693e876ea56601280d1d4 ecolab/classdesc (3.44-25-g462af7c)
+ 7f67efa49e62a032d3447f4562c0abd0f4616c2c ecolab/classdesc/json5_parser (1.0.0-8-g7f67efa)
+ a83dbb1d3a0ad497c0f405a0c74c4aef4cf7b96d ecolab/graphcode (3.4-33-ga83dbb1)
+ 34b57943392fa24d182ce4b87624df555cf285be exprtk (0.0.2-1-g34b5794)
+ 766495ce358c39b5ff0732dcef485e5da28abf7c libclipboard (heads/master)
+ 52eb8108c5bdec04579160ae17225d66034bd723 libclipboard/tests/third_party/googletest (release-1.8.0-3544-g52eb8108)
+
+=== Working tree changes (first 80) ===
+ ? ecolab
+
+=== Existing generated files ===
+ls: cannot access 'pyminsky.o': No such file or directory
+ls: cannot access 'pyminsky.so': No such file or directory
+ls: cannot access 'libminsky.a': No such file or directory
+ls: cannot access 'ecolab/lib/libecolab.a': No such file or directory
+-rw-r--r-- 1 lhh staff 40K Oct 20 17:37 ecolab/build.log

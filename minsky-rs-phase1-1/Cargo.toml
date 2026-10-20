@@ -1,0 +1,17 @@
+[workspace]
+resolver = "3"
+members = [
+  "crates/minsky-model",
+  "crates/minsky-format",
+  "crates/minsky-tensor",
+  "crates/minsky-engine",
+  "crates/minsky-cli",
+  "crates/minsky-reference-tests",
+  "apps/minsky-desktop",
+]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.85"
+license = "GPL-3.0-or-later"
+version = "0.1.0"

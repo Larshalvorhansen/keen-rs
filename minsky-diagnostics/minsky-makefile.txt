@@ -1,0 +1,300 @@
+=== Build variables ===
+16:ARCH=$(shell arch)
+20:ifeq ($(shell uname),Darwin)
+23:ifeq ($(ARCH),i386)
+24:ARCH=x86_64
+72:LIBS:=$(subst -lecolab,$(ECOLAB_HOME)/lib/libecolab.a,$(LIBS)) 
+79:ifeq ($(OS),Darwin)
+83:MACOSX_MIN_VERSION=$(shell sw_vers|grep ProductVersion|tr -s '\t'|cut -f2)
+84:LIBS+=-framework AppKit
+85:FLAGS+=-std=c++20
+104:build_libclipboard:=$(shell cd libclipboard; if cmake -DBUILD_SHARED_LIBS=0 -DCMAKE_C_FLAGS=-fPIC . &>build.log && $(MAKE) $(JOBS) >>build.log 2>&1; then echo "libclipboard built"; fi) 
+119:CXXFLAGS=-stdlib=libc++
+137:    ifeq ($(OS),Darwin)
+160:      NODE_FLAGS+=-I$(NODE_HEADER)
+162:    FLAGS+=-fno-omit-frame-pointer
+163:    NODE_FLAGS+=-Inode_modules/node-addon-api
+164:    NODE_FLAGS+='-DV8_DEPRECATION_WARNINGS' '-DV8_IMMINENT_DEPRECATION_WARNINGS'
+165:    NODE_FLAGS+='-D__STDC_FORMAT_MACROS' '-DNAPI_CPP_EXCEPTIONS'
+167:    $(warning node flags=$(NODE_FLAGS))
+169:    FLAGS+=$(NODE_FLAGS) 
+198:ifeq ($(OS),Darwin)
+199:FLAGS+=-DENABLE_DARWIN_EVENTS -DMAC_OSX_TK
+200:LIBS+=-Wl,-framework -Wl,Security -Wl,-headerpad_max_install_names
+216:DYLIBS=libminsky.$(DL) libminskyEngine.$(DL) libcivita.$(DL) 
+217:MINSKYLIBS=-lminsky -lminskyEngine -lcivita
+222:FLAGS+=-Werror
+229:FLAGS+=-DUSE_UNROLLED -DCLASSDESC_ARITIES=$(CLASSDESC_ARITIES)
+232:FLAGS+=-UTR1 -Ischema -Iengine -Imodel -Icertify/include -IRESTService -IRavelCAPI/civita -IRavelCAPI -Ilibclipboard/include -DCLASSDESC $(OPT) -UECOLAB_LIB -DECOLAB_LIB=\"library\" -DJSON_PACK_NO_FALL_THROUGH_TO_STREAMING -Wno-unused-local-typedefs -Wno-pragmas -Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-attributes -DCIVITA_ALLOCATOR=civita::LibCAllocator
+238:FLAGS+=-Wno-macro-redefined
+241:LIBS+=-Wl,--no-as-needed $(if $(call search,lib*/libboost_thread.so),-lboost_thread$(BOOST_EXT))
+242:LIBS+=$(if $(call search,lib*/libboost_system.so),-lboost_system$(BOOST_EXT)) -Wl,--as-needed
+247:FLAGS+=-std=c++20 -Wno-unused-command-line-argument -Wno-unknown-warning-option -Wno-defaulted-function-deleted -Wno-uninitialized
+253:ifneq ($(OS),Darwin)
+254:FLAGS+=-fopenmp
+255:LIBS+=-fopenmp
+260:FLAGS+=-Wp,-D_GLIBCXX_ASSERTIONS
+284:	$(CPLUSPLUS) -c $(FLAGS) $(CXXFLAGS) $(OPT) -o $@ $<
+287:	$(CPLUSPLUS) $(FLAGS)  $(CXXFLAGS) -MM -MG $< >$@
+294:LIBS+=-ltcmalloc
+298:LIBS+=-lprofiler
+301:FLAGS+=-DTIMERS
+309:  FLAGS+=-Werror=delete-non-virtual-dtor -Wno-unknown-pragmas -Wno-stringop-overflow  -Wno-stringop-overflow
+310:  CXXFLAGS+=-Wno-class-memaccess 
+314:FLAGS+=-fsanitize=address -fno-omit-frame-pointer -fno-optimize-sibling-calls -O1 -DRealloc=std::realloc
+315:LIBS+=-shared-libasan
+321:FLAGS+=-DMXE -D_WIN32 -DUSE_UNROLLED -Wa,-mbig-obj
+322:CXXFLAGS+=-std=c++20
+323:PYMINSKY=gui-js/dynamic_libraries/pyminsky.pyd
+324:PYTHONCAPI=ecolab/classdesc/pythonCAPI.o # extra python.lib shims required on Windows
+341:PYMINSKY=pyminsky.so
+345:FLAGS+=-Wa,-mbig-obj -Wl,-x -Wl,--oformat,pe-bigobj-x86-64
+348:LIBS:=-LRavelCAPI -lravelCAPI -LRavelCAPI/civita -lcivita  -lboost_date_time$(BOOST_EXT) -lgsl -lgslcblas -lssl -lcrypto $(LIBS)
+351:LIBS+=-lgdi32 -lcrypt32 -lbcrypt -lshcore
+353:LIBS+=-Llibclipboard -lclipboard -lxcb -lX11 -ldl
+358:FLAGS+=$(shell $(PKG_CONFIG) --cflags librsvg-2.0)
+359:LIBS+=$(shell $(PKG_CONFIG) --libs librsvg-2.0)
+362:FLAGS+=$(shell $(PKG_CONFIG) --cflags python3)
+363:LIBS+=$(shell $(PKG_CONFIG) --libs python3)
+365:GUI_LIBS=
+367:FLAGS+=-DBOOST_SIGNALS_NO_DEPRECATION_WARNING
+370:EXES+=$(PYMINSKY)
+389:ifeq ($(OS),Darwin)
+413:FLAGS+=-DCONSOLE
+414:FLAGS+=-mwindows
+436:	g++ -ObjC++ $(FLAGS) -I/opt/local/include -Iinclude -c $< -o $@
+439:	$(LINK) $(FLAGS) $^ -L/opt/local/lib/db48 $(LIBS) -o $@
+442:	$(LINK) $(FLAGS) $^ -L/opt/local/lib/db48 $(LIBS) -o $@
+445:	$(LINK) $(FLAGS) $^  $(LIBS) -o $@
+448:	$(LINK) $(FLAGS) $^  $(LIBS) -o $@
+471:	$(LINK) -shared -o $@ $^ $(LIBS)
+473:ifeq ($(OS),Darwin)
+474:	c++ -bundle -undefined dynamic_lookup -Wl,-no_pie -Wl,-search_paths_first -mmacosx-version-min=$(MACOSX_MIN_VERSION) -arch $(ARCH) -stdlib=libc++  -o $@  $^ $(LIBS)
+476:	$(LINK) $(FLAGS) -shared -pthread -rdynamic -m64  -Wl,-soname=minskyRESTService.node -o $@ -Wl,--start-group $^ -Wl,--end-group $(RPATH) $(LIBS)
+483:$(PYMINSKY): pyminsky.o $(PYTHONCAPI) libminsky.a ecolab/lib/libecolab.a
+484:ifeq ($(OS),Darwin)
+485:	c++ -bundle -undefined dynamic_lookup -Wl,-no_pie -Wl,-search_paths_first -mmacosx-version-min=$(MACOSX_MIN_VERSION) -arch $(ARCH) -stdlib=libc++  -o $@  $^ $(LIBS)
+489:	$(LINK) -shared $(FLAGS) -o $@ $^ libminsky.a $(RPATH) $(LIBS)
+495:	$(LINK) $(FLAGS) -o $@ $^ $(LIBS) -lpthread -ltirpc
+505:	$(CPLUSPLUS) $(FLAGS) $(CXXFLAGS) $(OPT) -c -o $@ $<
+508:	$(CPLUSPLUS) $(NODE_FLAGS) $(FLAGS) $(CXXFLAGS) $(OPT) -c -o $@ $<
+511:	$(CPLUSPLUS) $(NODE_FLAGS) $(FLAGS) $(CXXFLAGS) $(OPT) -c -o $@ $<
+599:LCOV_FLAGS=--no-external --ignore-errors gcov,mismatch,wrap,version
+603:#	lcov -i -c -d . $(LCOV_FLAGS) -o lcovi.info
+609:#	lcov -c -d .  $(LCOV_FLAGS) -o lcovt.info
+628:	codeql database create codeqlDb -l c++ -c "$(MAKE) $(MAKEFLAGS) gui-js/build/minskyRESTService.node" -j0  --overwrite
+
+=== Python extension rules ===
+ifndef MXE
+gui-js/libs/shared/src/lib/backend/minsky.ts: RESTService/typescriptAPI
+	RESTService/typescriptAPI > $@
+endif
+
+ifdef MXE
+DYNAMIC_LIB_DIR=gui-js/dynamic_libraries
+
+$(DYNAMIC_LIB_DIR)/%: $(BINDIR)/%
+	mkdir -p $(DYNAMIC_LIB_DIR)
+	cp $< $@
+# serialise this rule to rate limit connections to Sectigo timestamper
+	flock sign-lock sign.sh $@
+
+gui-js/build/minskyRESTService.node: $(DLLS:%=$(DYNAMIC_LIB_DIR)/%)
+endif
+
+# N-API node embedded RESTService
+gui-js/build/minskyRESTService.node: addon.o  $(NODE_API) $(RESTSERVICE_OBJS) $(MODEL_OBJS) $(SCHEMA_OBJS) $(ENGINE_OBJS) RavelCAPI/libravelCAPI.a RavelCAPI/civita/libcivita.a 
+	mkdir -p gui-js/build
+ifdef MXE
+	$(LINK) -shared -o $@ $^ $(LIBS)
+else
+ifeq ($(OS),Darwin)
+	c++ -bundle -undefined dynamic_lookup -Wl,-no_pie -Wl,-search_paths_first -mmacosx-version-min=$(MACOSX_MIN_VERSION) -arch $(ARCH) -stdlib=libc++  -o $@  $^ $(LIBS)
+else
+	$(LINK) $(FLAGS) -shared -pthread -rdynamic -m64  -Wl,-soname=minskyRESTService.node -o $@ -Wl,--start-group $^ -Wl,--end-group $(RPATH) $(LIBS)
+endif
+endif
+ 
+libminsky.a: $(RESTSERVICE_OBJS) $(MODEL_OBJS) $(SCHEMA_OBJS) $(ENGINE_OBJS)
+	ar r $@ $^
+
+$(PYMINSKY): pyminsky.o $(PYTHONCAPI) libminsky.a ecolab/lib/libecolab.a
+ifeq ($(OS),Darwin)
+	c++ -bundle -undefined dynamic_lookup -Wl,-no_pie -Wl,-search_paths_first -mmacosx-version-min=$(MACOSX_MIN_VERSION) -arch $(ARCH) -stdlib=libc++  -o $@  $^ $(LIBS)
+	cp pyminsky.so gui-js/build/
+else
+  ifndef MXE
+	$(LINK) -shared $(FLAGS) -o $@ $^ libminsky.a $(RPATH) $(LIBS)
+  endif
+endif
+
+# used to find undefined symbols in pyminsky.so
+pyminsky-test: test/testmain.o pyminsky.o libminsky.a
+	$(LINK) $(FLAGS) -o $@ $^ $(LIBS) -lpthread -ltirpc
+
+=== Top-level dependency rules ===
+.SUFFIXES: .xcd .rcd .tcd .gch .gcd $(SUFFIXES)
+
+SF_WEB=hpcoder@web.sourceforge.net:/home/project-web/minsky/htdocs
+
+export DEBUG
+export GCC
+export AEGIS
+export MXE
+export OPENMP
+export OPT
+
+# root directory for ecolab include files and libraries
+ECOLAB_HOME=$(shell pwd)/ecolab
+export LD_LIBRARY_PATH:=$(ECOLAB_HOME)/lib:$(LD_LIBRARY_PATH):/usr/local/lib64
+
+ARCH=$(shell arch)
+HAVE_CLANG=$(shell if which clang++>/dev/null; then echo 1; fi)
+SHELL=bash
+
+ifeq ($(shell uname),Darwin)
+MAKEOVERRIDES+=MAC_OSX_TK=1 TK=
+# for some reason, Intel Macs always report the arch as i386, even when they're x86_64
+ifeq ($(ARCH),i386)
+ARCH=x86_64
+endif
+endif
+
+ifdef MXE
+MAKEOVERRIDES+=MXE_PREFIX=x86_64-w64-mingw32.shared
+endif
+
+MAKEOVERRIDES+=DEBUG=$(DEBUG)
+
+ifdef MXE
+CPLUSPLUSOVERRIDE=
+else
+ifdef GCC
+COMPILER=g++
+else
+# default to clang if present
+ifeq ($(HAVE_CLANG),1)
+COMPILER=clang++ -std=c++20
+$(warning clang selected)
+else
+COMPILER=g++
+endif
+LINK=$(COMPILER)
+endif
+export COMPILER
+export CPLUSPLUS=$(COMPILER)
+CPLUSPLUSOVERRIDE=CPLUSPLUS="$(COMPILER)"
+endif
+
+ifneq ($(MAKECMDGOALS),clean)
+# make sure EcoLab is built first, even before starting to include Makefiles
+# disable AEGIS build here, as EcoLab 6 is still a little raw
+build_ecolab:=$(shell cd ecolab; if $(MAKE) $(MAKEOVERRIDES) $(CPLUSPLUSOVERRIDE) AEGIS= $(JOBS) only-libs >build.log 2>&1; then echo "ecolab built"; fi)
+
+#$(warning $(build_ecolab))
+ifneq ($(build_ecolab),ecolab built)
+$(warning $(shell cat ecolab/build.log))
+$(error Making ecolab failed: check ecolab/build.log)
+endif
+include $(ECOLAB_HOME)/include/Makefile
+
+ifndef MXE
+# rewrite CPLUSPLUS after clobber in Makefile
+CPLUSPLUS=$(COMPILER)
+endif
+
+# link statically to ecolab (needed until all bugs in EcoLab 6 ironed out)
+LIBS:=$(subst -lecolab,$(ECOLAB_HOME)/lib/libecolab.a,$(LIBS)) 
+endif
+
+ifndef OBS
+RPATH=-Wl,-rpath=$(ECOLAB_HOME)/lib
+endif
+
+ifeq ($(OS),Darwin)
+# location of minsky executable when building mac-dist
+MAC_DIST_DIR=minsky.app/Contents/MacOS
+# default min version is the machine doing the building.
+MACOSX_MIN_VERSION=$(shell sw_vers|grep ProductVersion|tr -s '\t'|cut -f2)
+LIBS+=-framework AppKit
+FLAGS+=-std=c++20
+# add in MacPorts prefix, in case Node is installed through MacPorts
+DIRS+=/opt/local
+endif
+
+export GCOV
+export CLASSDESC=$(shell pwd)/ecolab/classdesc/classdesc
+MAKEOVERRIDES+=FPIC=1 CLASSDESC=$(CLASSDESC)
+ifneq ($(MAKECMDGOALS),clean)
+
+# RavelCAPI
+build_ravelcapi:=$(shell cd RavelCAPI; if  $(MAKE) $(JOBS) $(MAKEOVERRIDES) >build.log 2>&1; then echo "ravelcapi built"; fi) 
+$(warning $(build_ravelcapi))
+ifneq ($(strip $(build_ravelcapi)),ravelcapi built)
+$(error Making RavelCAPI failed: check RavelCAPI/build.log)
+endif
+
+ifndef MXE
+# libclipboard
+build_libclipboard:=$(shell cd libclipboard; if cmake -DBUILD_SHARED_LIBS=0 -DCMAKE_C_FLAGS=-fPIC . &>build.log && $(MAKE) $(JOBS) >>build.log 2>&1; then echo "libclipboard built"; fi) 
+$(warning $(build_libclipboard))
+ifneq ($(strip $(build_libclipboard)),libclipboard built)
+$(error Making libclipboard failed: check libclipboard/build.log)
+endif
+endif
+
+endif
+
+ifdef FLTO
+# for some distros with older clang compilers. Passing this through
+CPLUSPLUS+=-flto
+endif
+
+ifdef CLANG_STDCPP
+CXXFLAGS=-stdlib=libc++
+endif
+
+ifdef DISTCC
+CPLUSPLUS=distcc
+# number of jobs to do sub-makes
+JOBS=-j 20
+else
+# number of jobs to do sub-makes
+JOBS=-j 4
+endif
+
+ifneq ($(MAKECMDGOALS),clean)
+  HAVE_NODE=$(shell if which node >/dev/null 2>&1; then echo 1; fi)
+  $(warning have node=$(HAVE_NODE))
+  ifeq ($(HAVE_NODE),1)
+    NODE_API=
+    nsearch=$(firstword $(foreach dir,$(DIRS) /usr,$(wildcard $(dir)/$(1))))
+    ifeq ($(OS),Darwin)
+      NODE_HEADER=$(call nsearch,include/node)
+    else
+      ifdef MXE
+        NODE_API+=node-api.o
+      endif
+      ifeq ($(OS),CYGWIN)
+        NODE_API+=node-api.o
+      endif
+      NODE_VERSION=$(shell node -v|sed -E -e 's/[^0-9]*([0-9]*).*/\1/')
+      NODE_HEADER=$(call nsearch,include/node$(NODE_VERSION))
+      ifeq ($(NODE_HEADER),) # Ubuntu stashes node headers at /usr/include/nodejs, also if node version doesn't match, create a link in your include search path (eg ~/usr/include/node
+        NODE_HEADER=$(call nsearch,include/node)
+      endif
+    endif
+    # if we haven't found an installed version of the Node SDK, then
+    # check if it has been copied into node-addon-api, as is done with
+    # release tarballs
+    ifeq ($(NODE_HEADER),)
+      ifeq ($(words $(wildcard  node_modules/node-addon-api/node_api.h)),0)
+        $(error Can't find node header files')
+      endif
+    else
+      NODE_FLAGS+=-I$(NODE_HEADER)
+    endif
+    FLAGS+=-fno-omit-frame-pointer
+    NODE_FLAGS+=-Inode_modules/node-addon-api
+    NODE_FLAGS+='-DV8_DEPRECATION_WARNINGS' '-DV8_IMMINENT_DEPRECATION_WARNINGS'
+    NODE_FLAGS+='-D__STDC_FORMAT_MACROS' '-DNAPI_CPP_EXCEPTIONS'

@@ -1,0 +1,11 @@
+=== File counts ===
+      28
+      85
+      45
+      38
+
+=== Minsky model count ===
+      37
+
+=== Total source size ===
+ 26M	/Users/lhh/Documents/keen-rs/minsky-phase0-audit

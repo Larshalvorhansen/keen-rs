@@ -1,0 +1,20 @@
+=== ecolab/bin/classdesc ===
+lrwxr-xr-x 1 lhh staff 62 Oct 20 17:37 ecolab/bin/classdesc -> /Users/lhh/Documents/keen-rs/minsky/ecolab/classdesc/classdesc
+ecolab/bin/classdesc: symbolic link to /Users/lhh/Documents/keen-rs/minsky/ecolab/classdesc/classdesc
+EXECUTABLE=YES
+=== ecolab/classdesc/classdesc ===
+-rwxr-xr-x 1 lhh staff 605560 Oct 20 17:37 ecolab/classdesc/classdesc
+ecolab/classdesc/classdesc: Mach-O 64-bit arm64 executable, flags:<NOUNDEFS|DYLDLINK|TWOLEVEL|WEAK_DEFINES|BINDS_TO_WEAK|PIE>
+EXECUTABLE=YES
+=== ecolab/classdesc/Makefile ===
+-rw-r--r-- 1 lhh staff 6276 Oct 19 16:45 ecolab/classdesc/Makefile
+ecolab/classdesc/Makefile: makefile script, ASCII text
+=== ecolab/include/Makefile.config ===
+-rw-r--r-- 1 lhh staff 57 Oct 20 17:33 ecolab/include/Makefile.config
+ecolab/include/Makefile.config: ASCII text
+=== ecolab/include/TCL_obj_base.cd ===
+-rw-r--r-- 1 lhh staff 0 Oct 20 17:33 ecolab/include/TCL_obj_base.cd
+ecolab/include/TCL_obj_base.cd: empty
+=== Related tools ===
+total 0
+lrwxr-xr-x 1 lhh staff 62 Oct 20 17:37 classdesc -> /Users/lhh/Documents/keen-rs/minsky/ecolab/classdesc/classdesc

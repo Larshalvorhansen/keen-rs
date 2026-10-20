@@ -1,0 +1,14 @@
+./LICENSE.md
+./Architecture.md
+./exprtk/readme.txt
+./license_.rtf
+./githubdocs/schema.md
+./Readme.md
+./RavelCAPI/LICENSE
+./RavelCAPI/README.md
+./libclipboard/LICENSE
+./libclipboard/README.md
+./ecolab/LICENSE
+./ecolab/README.md
+./ravelLicense.rtf
+./gui-js/README.md

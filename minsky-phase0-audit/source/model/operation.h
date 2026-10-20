@@ -1,0 +1,182 @@
+/*
+  @copyright Steve Keen 2012
+  @author Russell Standish
+  This file is part of Minsky.
+
+  Minsky is free software: you can redistribute it and/or modify it
+  under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Minsky is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with Minsky.  If not, see <http://www.gnu.org/licenses/>.
+*/
+#ifndef OPERATION_H
+#define OPERATION_H
+
+// override EcoLab's default CLASSDESC_ACCESS macro
+#include "classdesc_access.h"
+
+#include "item.h"
+#include "slider.h"
+
+#include <vector>
+#include <cairo/cairo.h>
+
+#include <arrays.h>
+
+#include "polyBase.h"
+#include "polyPackBase.h"
+#include <pack_base.h>
+#include "operationBase.h"
+#include "itemT.h"
+
+namespace minsky
+{
+  template <minsky::OperationType::Type T>
+  class Operation: public ItemT<Operation<T>, OperationBase>,
+                   public classdesc::PolyPack<Operation<T> >
+  {
+    typedef ItemT<Operation<T>, OperationBase> Super;
+  public:
+    typedef OperationType::Type Type;
+    Type type() const override {return T;}
+    void iconDraw(const ICairoShim&) const override;
+    std::size_t numPorts() const override 
+    {return OperationTypeInfo::numArguments<T>()+1;}
+    Operation() {
+      this->addPorts();
+      // custom arg defaults
+      switch (T)  {
+        case OperationType::runningSum: case OperationType::runningProduct:
+          this->arg=-1;
+          break;
+        default:
+          break;
+        }
+    }
+    Operation(const Operation& x): Super(x) {this->addPorts();}
+    Operation(Operation&& x): Super(x) {this->addPorts();}
+    Operation& operator=(const Operation& x) {
+      Super::operator=(x);
+      this->addPorts();
+      return *this;
+    }
+    Operation& operator=(Operation&& x) {
+      Super::operator=(x);
+      this->addPorts();
+      return *this;
+    }
+    std::string classType() const override {return "Operation:"+OperationType::typeName(T);}
+  };
+
+  class Time: public Operation<OperationType::time>
+  {
+  public:
+    Units units(bool) const override;
+  };
+  
+  class Derivative: public Operation<OperationType::differentiate>
+  {
+  public:
+    Units units(bool) const override;
+  };
+
+  class Copy: public Operation<OperationType::copy>
+  {
+  public:
+    Units units(bool check) const override {return m_ports[1]->units(check);}
+  };
+
+  /// base class for operations that have names
+  class NamedOp
+  {
+  protected:
+    std::string m_description;
+    virtual void updateBB()=0;
+    CLASSDESC_ACCESS(NamedOp);
+  public:
+    /// @{ name of the associated data operation
+    virtual std::string description() const;  
+    virtual std::string description(const std::string&);    
+    /// @}
+
+  };
+
+  /// helper class to draw port label symbols using ICairoShim
+  struct DrawBinOpShim
+  {
+    const ICairoShim& cairoShim;
+    double zoomFactor;
+    DrawBinOpShim(const ICairoShim& cairoShim, double z=1): cairoShim(cairoShim), zoomFactor(z) {}
+
+    void drawPlus() const
+    {
+      cairoShim.moveTo(0,-5);
+      cairoShim.lineTo(0,5);
+      cairoShim.moveTo(-5,0);
+      cairoShim.lineTo(5,0);
+      cairoShim.stroke();
+    }
+
+    void drawMinus() const
+    {
+      cairoShim.moveTo(-5,0);
+      cairoShim.lineTo(5,0);
+      cairoShim.stroke();
+    }
+
+    void drawMultiply() const
+    {
+      cairoShim.moveTo(-5,-5);
+      cairoShim.lineTo(5,5);
+      cairoShim.moveTo(-5,5);
+      cairoShim.lineTo(5,-5);
+      cairoShim.stroke();
+    }
+
+    void drawDivide() const
+    {
+      cairoShim.moveTo(-5,0);
+      cairoShim.lineTo(5,0);
+      cairoShim.newSubPath();
+      cairoShim.arc(0,3,1,0,2*M_PI);
+      cairoShim.newSubPath();
+      cairoShim.arc(0,-3,1,0,2*M_PI);
+      cairoShim.stroke();
+    }
+
+    void drawSymbol(const char* s) const;
+ 
+    // puts a small symbol to identify port
+    // x, y = position of symbol
+    template <class F>
+    void drawPort(F f, float x, float y, float rotation)  const
+    {
+      cairoShim.save();
+      
+      const double angle=rotation * M_PI / 180.0;
+      if (minsky::flipped(rotation))
+        y=-y;
+      cairoShim.rotate(angle);
+      
+      cairoShim.translate(0.7*x,0.6*y);
+      cairoShim.scale(0.5,0.5);
+      
+      // and counter-rotate
+      cairoShim.rotate(-angle);
+      f();
+      
+      cairoShim.restore();
+    }
+  };
+}
+
+#include "operation.cd"
+#include "operation.xcd"
+#endif

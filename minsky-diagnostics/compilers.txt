@@ -1,0 +1,43 @@
+=== cc ===
+/nix/store/v1zb8pqd25hsj0wd748nfczsa8ygciba-clang-wrapper-21.1.8/bin/cc
+clang version 21.1.8
+Target: arm64-apple-darwin
+Thread model: posix
+=== c++ ===
+/nix/store/v1zb8pqd25hsj0wd748nfczsa8ygciba-clang-wrapper-21.1.8/bin/c++
+clang version 21.1.8
+Target: arm64-apple-darwin
+Thread model: posix
+=== clang ===
+/nix/store/v1zb8pqd25hsj0wd748nfczsa8ygciba-clang-wrapper-21.1.8/bin/clang
+clang version 21.1.8
+Target: arm64-apple-darwin
+Thread model: posix
+=== clang++ ===
+/nix/store/v1zb8pqd25hsj0wd748nfczsa8ygciba-clang-wrapper-21.1.8/bin/clang++
+clang version 21.1.8
+Target: arm64-apple-darwin
+Thread model: posix
+=== gcc ===
+/usr/bin/gcc
+error: tool 'gcc' not found
+=== g++ ===
+/usr/bin/g++
+error: tool 'g++' not found
+=== make ===
+/nix/store/8l4wgxmhdxfvc9g18y76bnxl1ghgcp7n-gnumake-4.4.1/bin/make
+=== cmake ===
+/nix/store/q85csxf4s4shx89zif097h1ql4ax1rrz-cmake-4.4.3/bin/cmake
+=== pkg-config ===
+/nix/store/nhgylvj98klqggy54h7gbc3b2ia4a00y-pkg-config-wrapper-0.29.2/bin/pkg-config
+=== python3 ===
+/nix/store/0kcws5blwbdyxqxjd1w8hjipz61xny3k-python3-3.14.7/bin/python3
+Python 3.14.7
+=== bison ===
+/nix/store/sjp0zi3b8qmhlm058qarkzvs60dq60ih-bison-3.8.2/bin/bison
+=== flex ===
+/nix/store/xzwm6bj8svzvar5qrb7gpbs0yk4xkdri-flex-2.6.4/bin/flex
+=== perl ===
+/nix/store/7rvr6qjfzk2ybzn1imjw6c6qq1n1a9cr-perl-5.42.3/bin/perl
+=== git ===
+/nix/store/gw7c7m0dwca5lg4152x9lpmxpj171bzw-git-2.55.0/bin/git

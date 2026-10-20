@@ -1,0 +1,79 @@
+=== Generated configuration ===
+CAIRO=1
+PANGO=1
+MPI=
+PARALLEL=
+OPENMP=
+GCC=
+NOGUI=
+AQUA=
+
+=== Build configuration ===
+41:    BOOST_EXT=-mt-x64
+68:# Force use of GCC. 
+69:GCC=
+73:# On Macintosh, AQUA specifies the OS X Aqua versions of TCL/Tk
+75:AQUA=
+85:CLASSDESC=$(ECOLAB_HOME)/bin/classdesc
+131:  CXXFLAGS+=-Wno-noexcept-type -Wno-unused-local-typedefs -Wno-class-memaccess 
+133:CXXFLAGS+=-std=c++20
+174:  BOOST_EXT=
+175:  # try to autonomously figure out which boost extension we should be using
+176:  ifeq ($(shell if $(CPLUSPLUS) test/testmain.cc $(LIBS) -lboost_system>&/dev/null; then echo 1; else echo 0; fi),0)
+177:    ifeq ($(shell if $(CPLUSPLUS) test/testmain.cc $(LIBS) -lboost_system-mt>&/dev/null; then echo 1; else echo 0; fi),1)
+178:      BOOST_EXT=-mt
+180:      $(warning cannot figure out boost extension) 
+184:  $(warning Boost extension=$(BOOST_EXT))
+186:  GCC=1
+209:# add an appropriate extension to allow MPI and ICC builds to coexist with GCC
+223:# why is boost_thread required here?
+224:LIBS+=-L$(ECOLAB_HOME)/lib -lecolab$(ECOLIBS_EXT) -lboost_thread$(BOOST_EXT)
+245:# try to detect Intel C++ compiler if GCC not set
+267:ifndef GCC
+281:ifeq ($(OS),Darwin)
+283:# Darwin has some very old software installed. We need to ensure
+286:#used, which doesn't even support TR1, so we must deploy c++-11, not just for Darwin, but all other platforms!
+289:ifdef AQUA
+304:FLAGS+=-DBOOST_TR1
+306:ifneq ($(OS),Darwin)
+317:CLASSDESC=$(ECOLAB_HOME)/bin/classdesc.exe
+489:ifndef GCC
+492:CXXFLAGS=-ptr $(ECOLAB_HOME)/cxx_repository 
+493:CPLUSPLUS=cxx $(CXXFLAGS)
+495:LINK=cxx $(CXXFLAGS)
+512:ifdef AQUA
+528:endif # AQUA
+547:ifdef GCC
+666:DCXX=$(CPLUSPLUS)
+668:DCXX=distcc
+672:	$(DCXX) -c $(FLAGS) $(SYCL) $(CXXFLAGS) $(OPT) -o $@ $<
+688:	$(CPLUSPLUS) $(FLAGS)  $(CXXFLAGS) -MM -MG $< >$@
+691:	$(CLASSDESC) -nodef -typeName -i $< >$@
+692:	$(CLASSDESC) -nodef -onbase -I $(CDINCLUDE) -I $(ECOLAB_HOME)/include -i $< $(ACTIONS) >>$@
+693:	$(CLASSDESC) -nodef -onbase -use_mbr_pointers -typeName -I $(CDINCLUDE) -I $(ECOLAB_HOME)/include -i $< \
+
+=== Ecolab Makefile ===
+28:build_classdesc:=$(shell if [ ! -x bin/classdesc ]; then pushd classdesc; $(MAKE) XDR=$(XDR); popd; mkdir -p bin; ln -sf `pwd`/classdesc/classdesc bin/classdesc; fi)
+40:CXXFLAGS+=-std=c++20
+45:CXXFLAGS+=-std=c++20
+61:ifeq ($(OS),Darwin)
+62:CXXFLAGS+=-std=c++20
+80:CXXFLAGS+=-DMAC_OSX_TK 
+134:.PHONY: models classdesc
+158:GRAPHCODE_MAKE=$(MAKE) CC="$(CC)" CPLUSPLUS="$(CPLUSPLUS)" FLAGS="$(FLAGS) $(CXXFLAGS) $(OPT)"
+170:ifeq ($(OS),Darwin)
+183:ifndef GCC
+189:	cd classdesc; $(MAKE) PREFIX=$(ECOLAB_HOME) XDR=$(XDR)
+190:	ln -sf `pwd`/classdesc/classdesc $(CLASSDESC)
+192:src/xdr_pack.cc: classdesc/xdr_pack.cc
+211:	-rm -f $(patsubst classdesc/%,include/%,$(wildcard classdesc/*.h))
+213:	-cd classdesc; $(MAKE) clean 
+217:	-cd classdesc; $(MAKE) clean
+223:	-rm -rf classdesc-lib cxx_repository
+239:	$(LINK) $(FLAGS) src/pythonMain.o -Wl,-rpath $(ECOLAB_HOME)/lib $(LIBS) -lboost_system$(BOOST_EXT) -o $@
+251:	cp classdesc/*.{h,cd} $(PREFIX)/include
+252:	cp classdesc/classdesc $(PREFIX)/bin
+261:ifeq ($(OS),Darwin)
+310:	echo GCC=$(GCC)>>$(MCFG)
+350:	$(MAKE) clean; $(MAKE) DEBUG=1 GCC=1 MEMDEBUG=1 TIMECMDS=1 AEGIS=1
+359:	$(MAKE) clean; $(MAKE) DYNAMIC=1 GCC=1
